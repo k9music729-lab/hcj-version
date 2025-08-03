@@ -8,25 +8,23 @@ setInterval(() => {
   bgImage.src = images[index];
 }, 5000);
 
-// OpenRouter API call
+// Submit handler
 document.getElementById("chatForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const prompt = document.getElementById("name").value;
 
-  const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Authorization": "Bearer YOUR_API_KEY", // Replace with your actual key (⚠️ don't expose this in production)
-      "Content-Type": "application/json",
-      "HTTP-Referer": "http://localhost",  // optional
-      "X-Title": "BakchodiBot"
-    },
-    body: JSON.stringify({
-      model: "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
-      messages: [{ role: "user", content: prompt }]
-    })
-  });
+  try {
+    const response = await fetch("https://hcj-version.onrender.com/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ prompt: prompt })
+    });
 
-  const data = await response.json();
-  alert(data.choices[0].message.content);
+    const data = await response.json();
+    alert(data.response);  // Adjust this depending on your backend JSON format
+  } catch (error) {
+    alert("Error: " + error.message);
+  }
 });
