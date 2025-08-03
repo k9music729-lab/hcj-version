@@ -1,0 +1,32 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.background {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    overflow: hidden;
+}
+
+.background_content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0; /* Optional: dim the background for better readability */
+}
+
+form {
+    position: relative;
+    z-index: 1; /* Bring form above background image */
+    background: rgba(255, 255, 255, 0.8); /* Optional: semi-transparent box */
+    padding: 10px;
+    border-radius: 10px;
+}
