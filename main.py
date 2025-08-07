@@ -29,9 +29,10 @@ async def generate_response(query: Query):
             "HTTP-Referer": "<YOUR_SITE_URL>",
             "X-Title": "<YOUR_SITE_NAME>"
         },
-        model="cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
+        model="mistralai/mistral-small-3.1-24b-instruct:free/"
         messages=[
             {"role": "user", "content": [{"type": "text", "text": query.prompt}]}
         ]
     )
     return {"response": completion.choices[0].message.content}
+
