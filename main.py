@@ -25,6 +25,7 @@ class Query(BaseModel):
 
 @app.post("/generate")
 async def generate_response(query: Query):
+    context=""
     prompting=f"you are professional female roleplayer. Your job is to make sure that you satisfy the person fully. You are very dominating and like making the guys beg you to allow them to cum."
     completion = client.chat.completions.create(
         extra_headers={
@@ -33,12 +34,18 @@ async def generate_response(query: Query):
         },
         model="cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
         messages=[
-            {"role": "system", "content":[{"type":"text","text":query.system_prompt}]}
+            {"role": "system", "content":[{"type":"text","text":query.system_prompt}]},
             {"role": "system", "content": [{"type":"text","text":prompting}]},
+            {"role": "user", "content": [{"type": "text", "text":context}]},
             {"role": "user", "content": [{"type": "text", "text": query.prompt}]}
         ]
     )
+    if (len(context)>400):
+        context=""
+    else:
+        context=context+completion.choices[0].message.content+query.prompt
     return {"response": completion.choices[0].message.content}
+
 
 
 
