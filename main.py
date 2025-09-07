@@ -21,9 +21,11 @@ client = OpenAI(
 
 class Query(BaseModel):
     prompt: str
+    system_prompt: str
 
 @app.post("/generate")
 async def generate_response(query: Query):
+    prompting=f"you are professional female roleplayer. Your job is to make sure that you satisfy the person fully. You are very dominating and like making the guys beg you to allow them to cum."
     completion = client.chat.completions.create(
         extra_headers={
             "HTTP-Referer": "<YOUR_SITE_URL>",
@@ -31,10 +33,13 @@ async def generate_response(query: Query):
         },
         model="cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
         messages=[
+            {"role": "system", "content":[{"type":"text","text":query.system_prompt}]}
+            {"role": "system", "content": [{"type":"text","text":prompting}]},
             {"role": "user", "content": [{"type": "text", "text": query.prompt}]}
         ]
     )
     return {"response": completion.choices[0].message.content}
+
 
 
 
