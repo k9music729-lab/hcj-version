@@ -19,13 +19,15 @@ client = OpenAI(
     api_key=os.getenv("OPENROUTER_API_KEY")
 )
 
+context=os.getenv("context")
+
 class Query(BaseModel):
     prompt: str
     system_prompt: str
 
 @app.post("/generate")
 async def generate_response(query: Query):
-    context=""
+    global context
     prompting=f"you are professional female roleplayer. Your job is to make sure that you satisfy the person fully. You are very dominating and like making the guys beg you to allow them to cum."
     completion = client.chat.completions.create(
         extra_headers={
@@ -44,7 +46,9 @@ async def generate_response(query: Query):
         context=""
     else:
         context=context+completion.choices[0].message.content+query.prompt
+        os.environ["context"] = context
     return {"response": completion.choices[0].message.content}
+
 
 
 
